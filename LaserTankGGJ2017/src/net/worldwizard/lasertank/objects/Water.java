@@ -15,5 +15,6 @@ public class Water extends GameObject {
 	frames.add(ImageLoader.loadObjectImage("water_2"));
 	frames.add(ImageLoader.loadObjectImage("water_3"));
 	this.setFrameAppearances(frames);
+	this.setKills();
     }
 }

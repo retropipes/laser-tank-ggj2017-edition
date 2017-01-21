@@ -7,5 +7,6 @@ public class Wall extends GameObject {
 	super();
 	this.setName("Wall");
 	this.setAppearance(ImageLoader.loadObjectImage("wall"));
+	this.setSolid();
     }
 }

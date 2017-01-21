@@ -15,5 +15,6 @@ public class Flag extends GameObject {
 	frames.add(ImageLoader.loadObjectImage("flag_2"));
 	frames.add(ImageLoader.loadObjectImage("flag_3"));
 	this.setFrameAppearances(frames);
+	this.setGoal();
     }
 }

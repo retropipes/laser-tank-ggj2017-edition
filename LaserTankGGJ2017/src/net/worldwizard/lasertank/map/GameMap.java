@@ -5,6 +5,8 @@ import net.worldwizard.lasertank.objects.Flag;
 import net.worldwizard.lasertank.objects.GameObject;
 import net.worldwizard.lasertank.objects.Ground;
 import net.worldwizard.lasertank.objects.TankNorth;
+import net.worldwizard.lasertank.objects.Wall;
+import net.worldwizard.lasertank.objects.Water;
 
 public class GameMap {
     // Constants
@@ -24,17 +26,33 @@ public class GameMap {
 	Ground g = new Ground();
 	TankNorth t = new TankNorth();
 	Flag f = new Flag();
+	Wall wall = new Wall();
+	Water water = new Water();
 	for (int l = 0; l < GameMap.MAP_LAYERS; l++) {
 	    for (int x = 0; x < GameMap.MAP_WIDTH; x++) {
 		for (int y = 0; y < GameMap.MAP_HEIGHT; y++) {
 		    if (l == 0) {
-			this.set(g, x, y, l);
-		    } else if (l == 1 && x == 0 && y == 0) {
-			this.set(t, x, y, l);
-		    } else if (l == 1 && x == 15 && y == 15) {
-			this.set(f, x, y, l);
+			if (x == 3 && y == 3) {
+			    this.set(water, x, y, l);
+			} else {
+			    this.set(g, x, y, l);
+			}
 		    } else {
-			this.set(e, x, y, l);
+			if (x == 0 && y == 0) {
+			    this.set(t, x, y, l);
+			} else if (x == 2 && y == 2) {
+			    this.set(wall, x, y, l);
+			} else if (x == 2 && y == 4) {
+			    this.set(wall, x, y, l);
+			} else if (x == 4 && y == 2) {
+			    this.set(wall, x, y, l);
+			} else if (x == 4 && y == 4) {
+			    this.set(wall, x, y, l);
+			} else if (x == 15 && y == 15) {
+			    this.set(f, x, y, l);
+			} else {
+			    this.set(e, x, y, l);
+			}
 		    }
 		}
 	    }

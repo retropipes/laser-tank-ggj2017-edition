@@ -11,6 +11,9 @@ public abstract class GameObject {
     private int totalFrames;
     private boolean hasAnimation;
     private String name;
+    private boolean solid;
+    private boolean kills;
+    private boolean goal;
 
     // Constructor
     protected GameObject() {
@@ -19,6 +22,9 @@ public abstract class GameObject {
 	this.currentFrame = 0;
 	this.totalFrames = 1;
 	this.hasAnimation = false;
+	this.solid = false;
+	this.kills = false;
+	this.goal = false;
     }
 
     // Methods
@@ -38,6 +44,18 @@ public abstract class GameObject {
     public String getName() {
 	return this.name;
     }
+    
+    public boolean isSolid() {
+	return this.solid;
+    }
+    
+    public boolean killsPlayer() {
+	return this.kills;
+    }
+    
+    public boolean isGoal() {
+	return this.goal;
+    }
 
     protected void setFrames(int newFrames) {
 	this.hasAnimation = (newFrames > 1);
@@ -56,5 +74,17 @@ public abstract class GameObject {
 
     protected void setName(String newName) {
 	this.name = newName;
+    }
+    
+    protected void setSolid() {
+	this.solid = true;
+    }
+    
+    protected void setKills() {
+	this.kills = true;
+    }
+    
+    protected void setGoal() {
+	this.goal = true;
     }
 }
