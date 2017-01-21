@@ -10,13 +10,13 @@ public class GameMap {
     // Constants
     private static final int MAP_WIDTH = 16;
     private static final int MAP_HEIGHT = 16;
-    private static final int MAP_LAYERS = 4;
+    private static final int MAP_LAYERS = 2;
     // Fields
-    private GameObject[] data;
+    private GameObject[][][] data;
 
     public GameMap() {
 	super();
-	this.data = new GameObject[GameMap.MAP_WIDTH * GameMap.MAP_HEIGHT * GameMap.MAP_LAYERS];
+	this.data = new GameObject[GameMap.MAP_WIDTH][GameMap.MAP_HEIGHT][GameMap.MAP_LAYERS];
     }
 
     public void fill() {
@@ -42,10 +42,10 @@ public class GameMap {
     }
 
     public GameObject get(int x, int y, int l) {
-	return this.data[l * GameMap.MAP_LAYERS * GameMap.MAP_HEIGHT + y * GameMap.MAP_HEIGHT + x];
+	return this.data[x][y][l];
     }
 
     public void set(GameObject go, int x, int y, int l) {
-	this.data[l * GameMap.MAP_LAYERS * GameMap.MAP_HEIGHT + y * GameMap.MAP_HEIGHT + x] = go;
+	this.data[x][y][l] = go;
     }
 }
