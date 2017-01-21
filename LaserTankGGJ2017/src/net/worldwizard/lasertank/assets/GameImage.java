@@ -1,5 +1,6 @@
 package net.worldwizard.lasertank.assets;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -23,6 +24,29 @@ public class GameImage extends BufferedImage implements Icon {
 	    for (int y = 0; y < h; y++) {
 		int rgb = bi.getRGB(x, y);
 		this.setRGB(x, y, rgb);
+	    }
+	}
+    }
+
+    public GameImage(GameImage... gic) {
+	super(gic[0].getWidth(), gic[0].getHeight(), GameImage.DEFAULT_IMAGE_TYPE);
+	int w = gic[0].getWidth();
+	int h = gic[0].getHeight();
+	for (int x = 0; x < w; x++) {
+	    for (int y = 0; y < h; y++) {
+		int rgb = gic[0].getRGB(x, y);
+		this.setRGB(x, y, rgb);
+	    }
+	}
+	for (int i = 1; i < gic.length; i++) {
+	    for (int x = 0; x < w; x++) {
+		for (int y = 0; y < h; y++) {
+		    int rgb = gic[i].getRGB(x, y);
+		    Color c = new Color(rgb, true);
+		    if (c.getAlpha() != 0) {
+			this.setRGB(x, y, rgb);
+		    }
+		}
 	    }
 	}
     }

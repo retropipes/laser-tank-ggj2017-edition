@@ -1,7 +1,9 @@
 package net.worldwizard.lasertank;
 
+import net.worldwizard.lasertank.game.Game;
+
 public class LaserTank {
     public static void main(String[] args) {
-	// TODO Auto-generated method stub
+	new Game().startGame();
     }
 }
