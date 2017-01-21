@@ -1,13 +1,14 @@
 package net.worldwizard.lasertank.game;
 
-import java.awt.GridLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JPanel;
 
 import net.worldwizard.lasertank.assets.GameImage;
 import net.worldwizard.lasertank.assets.GameImageCache;
@@ -45,7 +46,7 @@ public class Game extends JFrame {
     // Fields
     EventHandler eh;
     GameMap map;
-    JLabel[][] draw;
+    GameDraw draw;
     int facing, laserFacing;
     int playerX, playerY, laserX, laserY;
     GameObject tank, laser;
@@ -64,19 +65,10 @@ public class Game extends JFrame {
 	this.map = new GameMap();
 	this.map.fill();
 	this.tank = this.map.get(this.playerX, this.playerY, 1);
-	this.draw = new JLabel[Game.MAP_SIZE][Game.MAP_SIZE];
-	this.getContentPane().setLayout(new GridLayout(Game.MAP_SIZE, Game.MAP_SIZE));
-	EmptyBorder eb = new EmptyBorder(0, 0, 0, 0);
-	for (int x = 0; x < Game.MAP_SIZE; x++) {
-	    for (int y = 0; y < Game.MAP_SIZE; y++) {
-		JLabel jl = new JLabel();
-		jl.setBorder(eb);
-		this.draw[x][y] = jl;
-		this.getContentPane().add(jl);
-	    }
-	}
+	this.draw = new GameDraw(Game.MAP_SIZE, 32);
+	this.getContentPane().setLayout(new FlowLayout());
+	this.getContentPane().add(this.draw);
 	this.addKeyListener(this.eh);
-	this.draw();
 	this.pack();
     }
 
@@ -87,18 +79,7 @@ public class Game extends JFrame {
     }
 
     void draw() {
-	for (int x = 0; x < Game.MAP_SIZE; x++) {
-	    for (int y = 0; y < Game.MAP_SIZE; y++) {
-		JLabel jl = this.draw[y][x];
-		GameImage gi0 = this.map.get(x, y, 0).getAppearance();
-		GameImage gi1 = this.map.get(x, y, 1).getAppearance();
-		GameImage gi2 = this.map.get(x, y, 2).getAppearance();
-		GameImage gi3 = this.map.get(x, y, 3).getAppearance();
-		GameImage gi = GameImageCache.getComposite(gi0, gi1, gi2, gi3);
-		jl.setIcon(gi);
-	    }
-	}
-	this.repaint();
+	this.draw.draw();
     }
 
     boolean fixBounds(int opx, int opy) {
@@ -124,7 +105,6 @@ public class Game extends JFrame {
 	    this.dead.play();
 	    this.map.set(Game.EMPTY, opx, opy, 1);
 	    this.removeKeyListener(this.eh);
-	    this.draw();
 	    JOptionPane.showMessageDialog(this, "You are dead!", "LaserTank", JOptionPane.INFORMATION_MESSAGE,
 		    Game.DIALOG_ICON);
 	    return false;
@@ -133,7 +113,6 @@ public class Game extends JFrame {
 	    this.goal.play();
 	    this.map.set(Game.EMPTY, opx, opy, 1);
 	    this.removeKeyListener(this.eh);
-	    this.draw();
 	    JOptionPane.showMessageDialog(this, "You win!", "LaserTank", JOptionPane.INFORMATION_MESSAGE,
 		    Game.DIALOG_ICON);
 	    return false;
@@ -182,9 +161,11 @@ public class Game extends JFrame {
 	public void keyPressed(KeyEvent e) {
 	    Game g = Game.this;
 	    boolean spun = false;
+	    boolean responded = false;
 	    int opx = g.playerX;
 	    int opy = g.playerY;
 	    if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+		responded = true;
 		if (g.facing == Game.FACING_EAST) {
 		    // Move
 		    g.playerX++;
@@ -197,6 +178,7 @@ public class Game extends JFrame {
 		    this.turn.play();
 		}
 	    } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+		responded = true;
 		if (g.facing == Game.FACING_WEST) {
 		    // Move
 		    g.playerX--;
@@ -209,6 +191,7 @@ public class Game extends JFrame {
 		    this.turn.play();
 		}
 	    } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+		responded = true;
 		if (g.facing == Game.FACING_SOUTH) {
 		    // Move
 		    g.playerY++;
@@ -221,6 +204,7 @@ public class Game extends JFrame {
 		    this.turn.play();
 		}
 	    } else if (e.getKeyCode() == KeyEvent.VK_UP) {
+		responded = true;
 		if (g.facing == Game.FACING_NORTH) {
 		    // Move
 		    g.playerY--;
@@ -233,6 +217,7 @@ public class Game extends JFrame {
 		    this.turn.play();
 		}
 	    } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+		responded = true;
 		// Shoot
 		this.fire.play();
 		spun = true;
@@ -270,14 +255,15 @@ public class Game extends JFrame {
 		    }
 		}
 	    }
-	    boolean proceed = g.fixBounds(opx, opy);
-	    if (proceed) {
-		if (g.playerX == opx && g.playerY == opy && !spun) {
-		    this.bump.play();
-		} else {
-		    g.map.set(Game.EMPTY, opx, opy, 1);
-		    g.map.set(g.tank, g.playerX, g.playerY, 1);
-		    g.draw();
+	    if (responded) {
+		boolean proceed = g.fixBounds(opx, opy);
+		if (proceed) {
+		    if (g.playerX == opx && g.playerY == opy && !spun) {
+			this.bump.play();
+		    } else {
+			g.map.set(Game.EMPTY, opx, opy, 1);
+			g.map.set(g.tank, g.playerX, g.playerY, 1);
+		    }
 		}
 	    }
 	}
@@ -355,6 +341,37 @@ public class Game extends JFrame {
 			Thread.sleep(1000);
 		    } catch (InterruptedException e) {
 			// Ignore
+		    }
+		}
+	    }
+	}
+    }
+
+    private class GameDraw extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private int tSize;
+
+	public GameDraw(int mapSize, int tileSize) {
+	    super();
+	    this.setPreferredSize(new Dimension(mapSize * tileSize, mapSize * tileSize));
+	    this.tSize = tileSize;
+	}
+
+	public void draw() {
+	    Game g = Game.this;
+	    Graphics gr = this.getGraphics();
+	    if (gr != null) {
+		for (int x = 0; x < Game.MAP_SIZE; x++) {
+		    for (int y = 0; y < Game.MAP_SIZE; y++) {
+			GameImage gi0 = g.map.get(x, y, 0).getAppearance();
+			GameImage gi1 = g.map.get(x, y, 1).getAppearance();
+			GameImage gi2 = g.map.get(x, y, 2).getAppearance();
+			GameImage gi3 = g.map.get(x, y, 3).getAppearance();
+			GameImage gi = GameImageCache.getComposite(gi0, gi1, gi2, gi3);
+			gr.drawImage(gi, x * this.tSize, y * this.tSize, null);
 		    }
 		}
 	    }
