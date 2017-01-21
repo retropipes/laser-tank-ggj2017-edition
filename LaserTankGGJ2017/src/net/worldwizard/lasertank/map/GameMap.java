@@ -34,19 +34,37 @@ public class GameMap {
 		    if (l == 0) {
 			if (x == 3 && y == 3) {
 			    this.set(water, x, y, l);
+			} else if (x == 3 && y == 5) {
+			    this.set(water, x, y, l);
+			} else if (x == 4 && y == 5) {
+			    this.set(water, x, y, l);
+			} else if (x == 5 && y == 3) {
+			    this.set(water, x, y, l);
+			} else if (x == 5 && y == 4) {
+			    this.set(water, x, y, l);
+			} else if (x == 5 && y == 5) {
+			    this.set(water, x, y, l);
 			} else {
 			    this.set(g, x, y, l);
 			}
 		    } else if (l == 1) {
 			if (x == 0 && y == 0) {
 			    this.set(t, x, y, l);
+			} else if (x == 2 && y == 0) {
+			    this.set(wall, x, y, l);
+			} else if (x == 2 && y == 1) {
+			    this.set(wall, x, y, l);
 			} else if (x == 2 && y == 2) {
 			    this.set(wall, x, y, l);
-			} else if (x == 2 && y == 4) {
+			} else if (x == 0 && y == 6) {
 			    this.set(wall, x, y, l);
-			} else if (x == 4 && y == 2) {
+			} else if (x == 1 && y == 6) {
 			    this.set(wall, x, y, l);
-			} else if (x == 4 && y == 4) {
+			} else if (x == 2 && y == 6) {
+			    this.set(wall, x, y, l);
+			} else if (x == 6 && y == 2) {
+			    this.set(wall, x, y, l);
+			} else if (x == 6 && y == 6) {
 			    this.set(wall, x, y, l);
 			} else if (x == 15 && y == 15) {
 			    this.set(f, x, y, l);
