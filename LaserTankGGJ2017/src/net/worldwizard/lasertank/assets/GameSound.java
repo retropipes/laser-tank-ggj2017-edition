@@ -5,9 +5,8 @@ import java.net.URL;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.SourceDataLine;
 
 public class GameSound {
     // Fields
@@ -28,6 +27,9 @@ public class GameSound {
     private static class Player extends Thread {
 	// Fields
 	private URL u;
+	private final int BUFFER_SIZE = 128000;
+	private AudioInputStream audioStream;
+	private SourceDataLine sourceLine;
 
 	// Constructor
 	public Player(URL input) {
@@ -36,12 +38,33 @@ public class GameSound {
 
 	@Override
 	public void run() {
-	    try (AudioInputStream ais = AudioSystem.getAudioInputStream(this.u); Clip c = AudioSystem.getClip()) {
-		c.open(ais);
-		c.start();
-	    } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+	    try {
+		this.audioStream = AudioSystem.getAudioInputStream(this.u);
+	    } catch (Exception e) {
 		// Ignore
 	    }
+	    try {
+		this.sourceLine = (SourceDataLine) AudioSystem
+			.getLine(new DataLine.Info(SourceDataLine.class, this.audioStream.getFormat()));
+		this.sourceLine.open(this.audioStream.getFormat());
+	    } catch (Exception e) {
+		// Ignore
+	    }
+	    this.sourceLine.start();
+	    int nBytesRead = 0;
+	    byte[] abData = new byte[this.BUFFER_SIZE];
+	    while (nBytesRead != -1) {
+		try {
+		    nBytesRead = this.audioStream.read(abData, 0, abData.length);
+		} catch (IOException e) {
+		    // Ignore
+		}
+		if (nBytesRead >= 0) {
+		    this.sourceLine.write(abData, 0, nBytesRead);
+		}
+	    }
+	    this.sourceLine.drain();
+	    this.sourceLine.close();
 	}
     }
 }
