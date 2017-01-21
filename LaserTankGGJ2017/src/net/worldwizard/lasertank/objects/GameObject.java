@@ -14,6 +14,7 @@ public abstract class GameObject {
     private boolean solid;
     private boolean kills;
     private boolean goal;
+    private boolean laserMoves;
 
     // Constructor
     protected GameObject() {
@@ -25,6 +26,7 @@ public abstract class GameObject {
 	this.solid = false;
 	this.kills = false;
 	this.goal = false;
+	this.laserMoves = false;
     }
 
     // Methods
@@ -56,6 +58,10 @@ public abstract class GameObject {
     public boolean isGoal() {
 	return this.goal;
     }
+    
+    public boolean laserMoves() {
+	return this.laserMoves;
+    }
 
     protected void setFrames(int newFrames) {
 	this.hasAnimation = (newFrames > 1);
@@ -86,5 +92,9 @@ public abstract class GameObject {
     
     protected void setGoal() {
 	this.goal = true;
+    }
+    
+    protected void setLaserMoves() {
+	this.laserMoves = true;
     }
 }

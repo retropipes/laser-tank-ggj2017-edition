@@ -1,5 +1,6 @@
 package net.worldwizard.lasertank.map;
 
+import net.worldwizard.lasertank.objects.Box;
 import net.worldwizard.lasertank.objects.Empty;
 import net.worldwizard.lasertank.objects.Flag;
 import net.worldwizard.lasertank.objects.GameObject;
@@ -28,6 +29,7 @@ public class GameMap {
 	Flag f = new Flag();
 	Wall wall = new Wall();
 	Water water = new Water();
+	Box box = new Box();
 	for (int l = 0; l < GameMap.MAP_LAYERS; l++) {
 	    for (int x = 0; x < GameMap.MAP_WIDTH; x++) {
 		for (int y = 0; y < GameMap.MAP_HEIGHT; y++) {
@@ -50,6 +52,8 @@ public class GameMap {
 		    } else if (l == 1) {
 			if (x == 0 && y == 0) {
 			    this.set(t, x, y, l);
+			} else if (x == 1 && y == 5) {
+			    this.set(box, x, y, l);
 			} else if (x == 2 && y == 0) {
 			    this.set(wall, x, y, l);
 			} else if (x == 2 && y == 1) {

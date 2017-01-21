@@ -16,14 +16,18 @@ import net.worldwizard.lasertank.assets.GameSound;
 import net.worldwizard.lasertank.loaders.ImageLoader;
 import net.worldwizard.lasertank.loaders.SoundLoader;
 import net.worldwizard.lasertank.map.GameMap;
+import net.worldwizard.lasertank.objects.Box;
+import net.worldwizard.lasertank.objects.Bridge;
 import net.worldwizard.lasertank.objects.Empty;
 import net.worldwizard.lasertank.objects.GameObject;
 import net.worldwizard.lasertank.objects.GreenLaserHorizontal;
 import net.worldwizard.lasertank.objects.GreenLaserVertical;
+import net.worldwizard.lasertank.objects.Ground;
 import net.worldwizard.lasertank.objects.TankEast;
 import net.worldwizard.lasertank.objects.TankNorth;
 import net.worldwizard.lasertank.objects.TankSouth;
 import net.worldwizard.lasertank.objects.TankWest;
+import net.worldwizard.lasertank.objects.Wall;
 
 public class Game extends JFrame {
     /**
@@ -42,6 +46,10 @@ public class Game extends JFrame {
     static final GameObject TANK_EAST = new TankEast();
     static final GameObject GREEN_HORZ = new GreenLaserHorizontal();
     static final GameObject GREEN_VERT = new GreenLaserVertical();
+    static final GameObject BOX = new Box();
+    static final GameObject WALL = new Wall();
+    static final GameObject BRIDGE = new Bridge();
+    static final GameObject GROUND = new Ground();
     private static final GameImage DIALOG_ICON = ImageLoader.loadUIImage("micrologo");
     // Fields
     EventHandler eh;
@@ -50,7 +58,7 @@ public class Game extends JFrame {
     int facing, laserFacing;
     int playerX, playerY, laserX, laserY;
     GameObject tank, laser;
-    GameSound dead, goal, laserDead;
+    GameSound dead, goal, laserDead, pushBox, sink;
 
     public Game() {
 	super("LaserTank");
@@ -62,6 +70,8 @@ public class Game extends JFrame {
 	this.dead = SoundLoader.loadSound("die");
 	this.goal = SoundLoader.loadSound("end_level");
 	this.laserDead = SoundLoader.loadSound("laser_die");
+	this.pushBox = SoundLoader.loadSound("push_box");
+	this.sink = SoundLoader.loadSound("sink");
 	this.map = new GameMap();
 	this.map.fill();
 	this.tank = this.map.get(this.playerX, this.playerY, 1);
@@ -120,7 +130,7 @@ public class Game extends JFrame {
 	return true;
     }
 
-    boolean fixLaserBounds() {
+    boolean fixLaserBounds(int olx, int oly) {
 	if (this.laserX < 0) {
 	    return false;
 	}
@@ -135,8 +145,33 @@ public class Game extends JFrame {
 	}
 	GameObject go0 = this.map.get(this.laserX, this.laserY, 0);
 	GameObject go1 = this.map.get(this.laserX, this.laserY, 1);
+	int dirX = this.laserX - olx;
+	int dirY = this.laserY - oly;
 	if (go0.isSolid() || go1.isSolid()) {
-	    this.laserDead.play();
+	    GameObject go0next = Game.GROUND;
+	    try {
+		go0next = this.map.get(this.laserX + dirX, this.laserY + dirY, 0);
+	    } catch (ArrayIndexOutOfBoundsException e) {
+		// Ignore
+	    }
+	    GameObject go1next = Game.WALL;
+	    try {
+		go1next = this.map.get(this.laserX + dirX, this.laserY + dirY, 1);
+	    } catch (ArrayIndexOutOfBoundsException e) {
+		// Ignore
+	    }
+	    if (go1.laserMoves() && !go1next.isSolid()) {
+		this.pushBox.play();
+		this.map.set(Game.EMPTY, this.laserX, this.laserY, 1);
+		if (go0next.killsPlayer()) {
+		    this.sink.play();
+		    this.map.set(Game.BRIDGE, this.laserX + dirX, this.laserY + dirY, 0);
+		} else {
+		    this.map.set(Game.BOX, this.laserX + dirX, this.laserY + dirY, 1);
+		}
+	    } else {
+		this.laserDead.play();
+	    }
 	    return false;
 	}
 	return true;
@@ -223,34 +258,34 @@ public class Game extends JFrame {
 		spun = true;
 		if (g.facing == Game.FACING_NORTH) {
 		    if (g.playerY > 0) {
-			g.map.set(Game.GREEN_VERT, g.playerX, g.playerY - 1, 3);
+			g.map.set(Game.GREEN_VERT, g.playerX, g.playerY, 3);
 			g.laser = Game.GREEN_VERT;
 			g.laserFacing = Game.FACING_NORTH;
 			g.laserX = g.playerX;
-			g.laserY = g.playerY - 1;
+			g.laserY = g.playerY;
 		    }
 		} else if (g.facing == Game.FACING_SOUTH) {
 		    if (g.playerY < Game.MAP_SIZE - 1) {
-			g.map.set(Game.GREEN_VERT, g.playerX, g.playerY + 1, 3);
+			g.map.set(Game.GREEN_VERT, g.playerX, g.playerY, 3);
 			g.laser = Game.GREEN_VERT;
 			g.laserFacing = Game.FACING_SOUTH;
 			g.laserX = g.playerX;
-			g.laserY = g.playerY + 1;
+			g.laserY = g.playerY;
 		    }
 		} else if (g.facing == Game.FACING_WEST) {
 		    if (g.playerX > 0) {
-			g.map.set(Game.GREEN_HORZ, g.playerX - 1, g.playerY, 3);
+			g.map.set(Game.GREEN_HORZ, g.playerX, g.playerY, 3);
 			g.laser = Game.GREEN_HORZ;
 			g.laserFacing = Game.FACING_WEST;
-			g.laserX = g.playerX - 1;
+			g.laserX = g.playerX;
 			g.laserY = g.playerY;
 		    }
 		} else if (g.facing == Game.FACING_EAST) {
 		    if (g.playerX < Game.MAP_SIZE - 1) {
-			g.map.set(Game.GREEN_HORZ, g.playerX + 1, g.playerY, 3);
+			g.map.set(Game.GREEN_HORZ, g.playerX, g.playerY, 3);
 			g.laser = Game.GREEN_HORZ;
 			g.laserFacing = Game.FACING_EAST;
-			g.laserX = g.playerX + 1;
+			g.laserX = g.playerX;
 			g.laserY = g.playerY;
 		    }
 		}
@@ -323,7 +358,7 @@ public class Game extends JFrame {
 		    } else if (g.laserFacing == Game.FACING_EAST) {
 			g.laserX++;
 		    }
-		    boolean laserAlive = g.fixLaserBounds();
+		    boolean laserAlive = g.fixLaserBounds(olx, oly);
 		    g.map.set(Game.EMPTY, olx, oly, 3);
 		    if (!laserAlive) {
 			g.laser = null;
