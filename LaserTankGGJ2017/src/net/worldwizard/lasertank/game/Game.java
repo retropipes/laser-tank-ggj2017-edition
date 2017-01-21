@@ -150,8 +150,8 @@ public class Game extends JFrame {
 	if (this.laserY >= Game.MAP_SIZE) {
 	    return false;
 	}
-	GameObject go0 = this.map.get(this.playerX, this.playerY, 0);
-	GameObject go1 = this.map.get(this.playerX, this.playerY, 1);
+	GameObject go0 = this.map.get(this.laserX, this.laserY, 0);
+	GameObject go1 = this.map.get(this.laserX, this.laserY, 1);
 	if (go0.isSolid() || go1.isSolid()) {
 	    this.laserDead.play();
 	    return false;
