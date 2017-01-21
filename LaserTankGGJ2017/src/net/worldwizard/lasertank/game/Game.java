@@ -12,6 +12,7 @@ import javax.swing.border.EmptyBorder;
 import net.worldwizard.lasertank.assets.GameImage;
 import net.worldwizard.lasertank.assets.GameImageCache;
 import net.worldwizard.lasertank.assets.GameSound;
+import net.worldwizard.lasertank.loaders.ImageLoader;
 import net.worldwizard.lasertank.loaders.SoundLoader;
 import net.worldwizard.lasertank.map.GameMap;
 import net.worldwizard.lasertank.objects.Empty;
@@ -40,6 +41,7 @@ public class Game extends JFrame {
     static final GameObject TANK_EAST = new TankEast();
     static final GameObject GREEN_HORZ = new GreenLaserHorizontal();
     static final GameObject GREEN_VERT = new GreenLaserVertical();
+    private static final GameImage DIALOG_ICON = ImageLoader.loadUIImage("micrologo");
     // Fields
     EventHandler eh;
     GameMap map;
@@ -123,7 +125,8 @@ public class Game extends JFrame {
 	    this.map.set(Game.EMPTY, opx, opy, 1);
 	    this.removeKeyListener(this.eh);
 	    this.draw();
-	    JOptionPane.showMessageDialog(this, "You are dead!", "LaserTank", JOptionPane.INFORMATION_MESSAGE);
+	    JOptionPane.showMessageDialog(this, "You are dead!", "LaserTank", JOptionPane.INFORMATION_MESSAGE,
+		    Game.DIALOG_ICON);
 	    return false;
 	}
 	if (go0.isGoal() || go1.isGoal()) {
@@ -131,7 +134,8 @@ public class Game extends JFrame {
 	    this.map.set(Game.EMPTY, opx, opy, 1);
 	    this.removeKeyListener(this.eh);
 	    this.draw();
-	    JOptionPane.showMessageDialog(this, "You win!", "LaserTank", JOptionPane.INFORMATION_MESSAGE);
+	    JOptionPane.showMessageDialog(this, "You win!", "LaserTank", JOptionPane.INFORMATION_MESSAGE,
+		    Game.DIALOG_ICON);
 	    return false;
 	}
 	return true;
