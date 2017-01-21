@@ -74,6 +74,7 @@ public class Game extends JFrame {
 
     public void startGame() {
 	this.setVisible(true);
+	new Animator().start();
     }
 
     void draw() {
@@ -211,6 +212,31 @@ public class Game extends JFrame {
 	@Override
 	public void keyReleased(KeyEvent e) {
 	    // Do nothing
+	}
+    }
+
+    private class Animator extends Thread {
+	public Animator() {
+	    // Do nothing
+	}
+
+	@Override
+	public void run() {
+	    Game g = Game.this;
+	    while (true) {
+		for (int x = 0; x < Game.MAP_SIZE; x++) {
+		    for (int y = 0; y < Game.MAP_SIZE; y++) {
+			g.map.get(x, y, 0).animate();
+			g.map.get(x, y, 1).animate();
+		    }
+		}
+		g.draw();
+		try {
+		    Thread.sleep(100);
+		} catch (InterruptedException e) {
+		    // Ignore
+		}
+	    }
 	}
     }
 }
