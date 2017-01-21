@@ -3,7 +3,7 @@ package net.worldwizard.lasertank.objects;
 import java.util.ArrayList;
 
 import net.worldwizard.lasertank.assets.GameImage;
-import net.worldwizard.lasertank.loaders.ImageLoader;
+import net.worldwizard.lasertank.assets.GameImageCache;
 
 public class Water extends GameObject {
     public Water() {
@@ -11,9 +11,9 @@ public class Water extends GameObject {
 	this.setName("Water");
 	this.setFrames(3);
 	ArrayList<GameImage> frames = new ArrayList<>();
-	frames.add(ImageLoader.loadObjectImage("water_1"));
-	frames.add(ImageLoader.loadObjectImage("water_2"));
-	frames.add(ImageLoader.loadObjectImage("water_3"));
+	frames.add(GameImageCache.get("water_1"));
+	frames.add(GameImageCache.get("water_2"));
+	frames.add(GameImageCache.get("water_3"));
 	this.setFrameAppearances(frames);
 	this.setKills();
     }

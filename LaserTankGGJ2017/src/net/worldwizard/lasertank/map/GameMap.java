@@ -12,7 +12,7 @@ public class GameMap {
     // Constants
     private static final int MAP_WIDTH = 16;
     private static final int MAP_HEIGHT = 16;
-    private static final int MAP_LAYERS = 2;
+    private static final int MAP_LAYERS = 4;
     // Fields
     private GameObject[][][] data;
 
@@ -37,7 +37,7 @@ public class GameMap {
 			} else {
 			    this.set(g, x, y, l);
 			}
-		    } else {
+		    } else if (l == 1) {
 			if (x == 0 && y == 0) {
 			    this.set(t, x, y, l);
 			} else if (x == 2 && y == 2) {
@@ -53,6 +53,8 @@ public class GameMap {
 			} else {
 			    this.set(e, x, y, l);
 			}
+		    } else {
+			this.set(e, x, y, l);
 		    }
 		}
 	    }

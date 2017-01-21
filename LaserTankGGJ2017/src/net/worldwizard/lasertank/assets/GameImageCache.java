@@ -2,25 +2,45 @@ package net.worldwizard.lasertank.assets;
 
 import java.util.ArrayList;
 
+import net.worldwizard.lasertank.loaders.ImageLoader;
+
 public class GameImageCache {
     // Fields
-    private ArrayList<GameImage> cache;
+    private static ArrayList<GameImage> cache;
 
     // Constructor
-    public GameImageCache() {
-	this.cache = new ArrayList<>();
+    private GameImageCache() {
+	// Do nothing
     }
 
     // Methods
-    public GameImage getComposite(GameImage... gic) {
+    public static GameImage get(String name) {
+	if (cache == null) {
+	    cache = new ArrayList<>();
+	}
+	GameImage test = new GameImage(name);
+	if (cache.contains(test)) {
+	    int index = cache.indexOf(test);
+	    return cache.get(index);
+	} else {
+	    GameImage gi = ImageLoader.loadObjectImage(name);
+	    cache.add(gi);
+	    return gi;
+	}
+    }
+
+    public static GameImage getComposite(GameImage... gic) {
+	if (cache == null) {
+	    cache = new ArrayList<>();
+	}
 	String cacheName = GameImage.generateCacheName(gic);
 	GameImage test = new GameImage(cacheName);
-	if (this.cache.contains(test)) {
-	    int index = this.cache.indexOf(test);
-	    return this.cache.get(index);
+	if (cache.contains(test)) {
+	    int index = cache.indexOf(test);
+	    return cache.get(index);
 	} else {
 	    GameImage gi = new GameImage(gic);
-	    this.cache.add(gi);
+	    cache.add(gi);
 	    return gi;
 	}
     }
