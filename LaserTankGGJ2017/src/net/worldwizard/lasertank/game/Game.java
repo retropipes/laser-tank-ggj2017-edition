@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.border.EmptyBorder;
 
 import net.worldwizard.lasertank.assets.GameImage;
+import net.worldwizard.lasertank.assets.GameImageCache;
 import net.worldwizard.lasertank.assets.GameSound;
 import net.worldwizard.lasertank.loaders.SoundLoader;
 import net.worldwizard.lasertank.map.GameMap;
@@ -37,6 +38,7 @@ public class Game extends JFrame {
     static final GameObject TANK_EAST = new TankEast();
     // Fields
     private EventHandler eh;
+    private GameImageCache gic;
     GameMap map;
     JLabel[][] draw;
     int facing;
@@ -47,6 +49,7 @@ public class Game extends JFrame {
     public Game() {
 	super("LaserTank");
 	this.eh = new EventHandler();
+	this.gic = new GameImageCache();
 	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	this.facing = Game.FACING_NORTH;
 	this.playerX = 0;
@@ -83,7 +86,7 @@ public class Game extends JFrame {
 		JLabel jl = this.draw[y][x];
 		GameImage gi0 = this.map.get(x, y, 0).getAppearance();
 		GameImage gi1 = this.map.get(x, y, 1).getAppearance();
-		GameImage gi = new GameImage(gi0, gi1);
+		GameImage gi = this.gic.getComposite(gi0, gi1);
 		jl.setIcon(gi);
 	    }
 	}

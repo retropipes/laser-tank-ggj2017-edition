@@ -18,9 +18,9 @@ public class ImageLoader {
 	try (InputStream is = ImageLoader.class
 		.getResourceAsStream("/net/worldwizard/lasertank/assets/images/objects/" + imageName + ".png")) {
 	    BufferedImage bi = ImageIO.read(is);
-	    return new GameImage(bi);
+	    return new GameImage(imageName, bi);
 	} catch (IOException e) {
-	    return new GameImage();
+	    return new GameImage("null");
 	}
     }
 
@@ -28,9 +28,9 @@ public class ImageLoader {
 	try (InputStream is = ImageLoader.class
 		.getResourceAsStream("/net/worldwizard/lasertank/assets/images/ui/" + imageName + ".png")) {
 	    BufferedImage bi = ImageIO.read(is);
-	    return new GameImage(bi);
+	    return new GameImage(imageName, bi);
 	} catch (IOException e) {
-	    return new GameImage();
+	    return new GameImage("null");
 	}
     }
 }
