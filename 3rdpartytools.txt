@@ -1,0 +1,14 @@
+=Java SE 8=
+http://www.oracle.com/technetwork/java/javase/downloads/index.html
+
+=Eclipse=
+http://www.eclipse.org/downloads/
+
+=OGG Vorbis Player=
+http://www.javazoom.net/vorbisspi/vorbisspi.html
+
+=AppBundler=
+https://bitbucket.org/infinitekind/appbundler
+
+=Launch4J=
+http://launch4j.sourceforge.net
