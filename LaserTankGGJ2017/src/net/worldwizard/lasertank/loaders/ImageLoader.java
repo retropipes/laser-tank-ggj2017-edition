@@ -14,22 +14,22 @@ public class ImageLoader {
 	// Do nothing
     }
 
-    public static GameImage loadObjectImage(String imageName) {
+    public static GameImage loadObjectImage(final String imageName) {
 	try (InputStream is = ImageLoader.class
 		.getResourceAsStream("/net/worldwizard/lasertank/assets/images/objects/" + imageName + ".png")) {
-	    BufferedImage bi = ImageIO.read(is);
+	    final BufferedImage bi = ImageIO.read(is);
 	    return new GameImage(imageName, bi);
-	} catch (IOException e) {
+	} catch (final IOException e) {
 	    return new GameImage("null");
 	}
     }
 
-    public static GameImage loadUIImage(String imageName) {
+    public static GameImage loadUIImage(final String imageName) {
 	try (InputStream is = ImageLoader.class
 		.getResourceAsStream("/net/worldwizard/lasertank/assets/images/ui/" + imageName + ".png")) {
-	    BufferedImage bi = ImageIO.read(is);
+	    final BufferedImage bi = ImageIO.read(is);
 	    return new GameImage(imageName, bi);
-	} catch (IOException e) {
+	} catch (final IOException e) {
 	    return new GameImage("null");
 	}
     }

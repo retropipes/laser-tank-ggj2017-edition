@@ -6,11 +6,10 @@ import net.worldwizard.lasertank.assets.GameImage;
 
 public abstract class GameObject {
     // Fields
-    private ArrayList<GameImage> appearances;
+    private final ArrayList<GameImage> appearances;
     private int currentFrame;
     private int totalFrames;
     private boolean hasAnimation;
-    private String name;
     private boolean solid;
     private boolean kills;
     private boolean goal;
@@ -43,57 +42,49 @@ public abstract class GameObject {
 	}
     }
 
-    public String getName() {
-	return this.name;
-    }
-    
     public boolean isSolid() {
 	return this.solid;
     }
-    
+
     public boolean killsPlayer() {
 	return this.kills;
     }
-    
+
     public boolean isGoal() {
 	return this.goal;
     }
-    
+
     public boolean laserMoves() {
 	return this.laserMoves;
     }
 
-    protected void setFrames(int newFrames) {
-	this.hasAnimation = (newFrames > 1);
+    protected void setFrames(final int newFrames) {
+	this.hasAnimation = newFrames > 1;
 	this.totalFrames = newFrames;
     }
 
-    protected void setAppearance(GameImage image) {
+    protected void setAppearance(final GameImage image) {
 	this.appearances.clear();
 	this.appearances.add(image);
     }
 
-    protected void setFrameAppearances(ArrayList<GameImage> frameApps) {
+    protected void setFrameAppearances(final ArrayList<GameImage> frameApps) {
 	this.appearances.clear();
 	this.appearances.addAll(frameApps);
     }
 
-    protected void setName(String newName) {
-	this.name = newName;
-    }
-    
     protected void setSolid() {
 	this.solid = true;
     }
-    
+
     protected void setKills() {
 	this.kills = true;
     }
-    
+
     protected void setGoal() {
 	this.goal = true;
     }
-    
+
     protected void setLaserMoves() {
 	this.laserMoves = true;
     }
