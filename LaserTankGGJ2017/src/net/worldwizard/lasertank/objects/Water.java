@@ -8,9 +8,8 @@ import net.worldwizard.lasertank.assets.GameImageCache;
 public class Water extends GameObject {
     public Water() {
 	super();
-	this.setName("Water");
 	this.setFrames(3);
-	ArrayList<GameImage> frames = new ArrayList<>();
+	final ArrayList<GameImage> frames = new ArrayList<>();
 	frames.add(GameImageCache.get("water_1"));
 	frames.add(GameImageCache.get("water_2"));
 	frames.add(GameImageCache.get("water_3"));

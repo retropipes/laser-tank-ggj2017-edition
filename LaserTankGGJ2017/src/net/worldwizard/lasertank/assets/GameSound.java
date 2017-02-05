@@ -13,7 +13,7 @@ public class GameSound {
     private final URL location;
 
     // Constructor
-    public GameSound(URL u) {
+    public GameSound(final URL u) {
 	super();
 	this.location = u;
     }
@@ -26,13 +26,13 @@ public class GameSound {
 
     private static class Player extends Thread {
 	// Fields
-	private URL u;
+	private final URL u;
 	private final int BUFFER_SIZE = 128000;
 	private AudioInputStream audioStream;
 	private SourceDataLine sourceLine;
 
 	// Constructor
-	public Player(URL input) {
+	public Player(final URL input) {
 	    this.u = input;
 	}
 
@@ -40,23 +40,23 @@ public class GameSound {
 	public void run() {
 	    try {
 		this.audioStream = AudioSystem.getAudioInputStream(this.u);
-	    } catch (Exception e) {
+	    } catch (final Exception e) {
 		// Ignore
 	    }
 	    try {
 		this.sourceLine = (SourceDataLine) AudioSystem
 			.getLine(new DataLine.Info(SourceDataLine.class, this.audioStream.getFormat()));
 		this.sourceLine.open(this.audioStream.getFormat());
-	    } catch (Exception e) {
+	    } catch (final Exception e) {
 		// Ignore
 	    }
 	    this.sourceLine.start();
 	    int nBytesRead = 0;
-	    byte[] abData = new byte[this.BUFFER_SIZE];
+	    final byte[] abData = new byte[this.BUFFER_SIZE];
 	    while (nBytesRead != -1) {
 		try {
 		    nBytesRead = this.audioStream.read(abData, 0, abData.length);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 		    // Ignore
 		}
 		if (nBytesRead >= 0) {

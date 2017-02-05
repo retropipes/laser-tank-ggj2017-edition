@@ -10,8 +10,8 @@ public class SoundLoader {
 	// Do nothing
     }
 
-    public static GameSound loadSound(String soundName) {
-	URL u = SoundLoader.class.getResource("/net/worldwizard/lasertank/assets/sounds/" + soundName + ".wav");
+    public static GameSound loadSound(final String soundName) {
+	final URL u = SoundLoader.class.getResource("/net/worldwizard/lasertank/assets/sounds/" + soundName + ".wav");
 	return new GameSound(u);
     }
 }
