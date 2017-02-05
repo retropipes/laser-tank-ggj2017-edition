@@ -14,33 +14,33 @@ public class GameImageCache {
     }
 
     // Methods
-    public static GameImage get(final String name) {
-	if (GameImageCache.cache == null) {
-	    GameImageCache.cache = new ArrayList<>();
+    public static GameImage get(String name) {
+	if (cache == null) {
+	    cache = new ArrayList<>();
 	}
-	final GameImage test = new GameImage(name);
-	if (GameImageCache.cache.contains(test)) {
-	    final int index = GameImageCache.cache.indexOf(test);
-	    return GameImageCache.cache.get(index);
+	GameImage test = new GameImage(name);
+	if (cache.contains(test)) {
+	    int index = cache.indexOf(test);
+	    return cache.get(index);
 	} else {
-	    final GameImage gi = ImageLoader.loadObjectImage(name);
-	    GameImageCache.cache.add(gi);
+	    GameImage gi = ImageLoader.loadObjectImage(name);
+	    cache.add(gi);
 	    return gi;
 	}
     }
 
-    public static GameImage getComposite(final GameImage... gic) {
-	if (GameImageCache.cache == null) {
-	    GameImageCache.cache = new ArrayList<>();
+    public static GameImage getComposite(GameImage... gic) {
+	if (cache == null) {
+	    cache = new ArrayList<>();
 	}
-	final String cacheName = GameImage.generateCacheName(gic);
-	final GameImage test = new GameImage(cacheName);
-	if (GameImageCache.cache.contains(test)) {
-	    final int index = GameImageCache.cache.indexOf(test);
-	    return GameImageCache.cache.get(index);
+	String cacheName = GameImage.generateCacheName(gic);
+	GameImage test = new GameImage(cacheName);
+	if (cache.contains(test)) {
+	    int index = cache.indexOf(test);
+	    return cache.get(index);
 	} else {
-	    final GameImage gi = new GameImage(gic);
-	    GameImageCache.cache.add(gi);
+	    GameImage gi = new GameImage(gic);
+	    cache.add(gi);
 	    return gi;
 	}
     }

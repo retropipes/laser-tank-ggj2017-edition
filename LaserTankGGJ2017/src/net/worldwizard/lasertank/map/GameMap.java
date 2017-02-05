@@ -15,7 +15,7 @@ public class GameMap {
     private static final int MAP_HEIGHT = 16;
     private static final int MAP_LAYERS = 4;
     // Fields
-    private final GameObject[][][] data;
+    private GameObject[][][] data;
 
     public GameMap() {
 	super();
@@ -23,13 +23,13 @@ public class GameMap {
     }
 
     public void fill() {
-	final Empty e = new Empty();
-	final Ground g = new Ground();
-	final TankNorth t = new TankNorth();
-	final Flag f = new Flag();
-	final Wall wall = new Wall();
-	final Water water = new Water();
-	final Box box = new Box();
+	Empty e = new Empty();
+	Ground g = new Ground();
+	TankNorth t = new TankNorth();
+	Flag f = new Flag();
+	Wall wall = new Wall();
+	Water water = new Water();
+	Box box = new Box();
 	for (int l = 0; l < GameMap.MAP_LAYERS; l++) {
 	    for (int x = 0; x < GameMap.MAP_WIDTH; x++) {
 		for (int y = 0; y < GameMap.MAP_HEIGHT; y++) {
@@ -83,11 +83,11 @@ public class GameMap {
 	}
     }
 
-    public GameObject get(final int x, final int y, final int l) {
+    public GameObject get(int x, int y, int l) {
 	return this.data[x][y][l];
     }
 
-    public void set(final GameObject go, final int x, final int y, final int l) {
+    public void set(GameObject go, int x, int y, int l) {
 	this.data[x][y][l] = go;
     }
 }

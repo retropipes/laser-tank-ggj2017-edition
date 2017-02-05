@@ -31,7 +31,7 @@ import net.worldwizard.lasertank.objects.Wall;
 
 public class Game extends JFrame {
     /**
-     *
+     * 
      */
     private static final long serialVersionUID = 1L;
     static final int MAP_SIZE = 16;
@@ -63,7 +63,7 @@ public class Game extends JFrame {
     public Game() {
 	super("LaserTank");
 	this.eh = new EventHandler();
-	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	this.facing = Game.FACING_NORTH;
 	this.playerX = 0;
 	this.playerY = 0;
@@ -92,7 +92,7 @@ public class Game extends JFrame {
 	this.draw.draw();
     }
 
-    boolean fixBounds(final int opx, final int opy) {
+    boolean fixBounds(int opx, int opy) {
 	if (this.playerX < 0) {
 	    this.playerX = 0;
 	}
@@ -105,8 +105,8 @@ public class Game extends JFrame {
 	if (this.playerY >= Game.MAP_SIZE) {
 	    this.playerY = Game.MAP_SIZE - 1;
 	}
-	final GameObject go0 = this.map.get(this.playerX, this.playerY, 0);
-	final GameObject go1 = this.map.get(this.playerX, this.playerY, 1);
+	GameObject go0 = this.map.get(this.playerX, this.playerY, 0);
+	GameObject go1 = this.map.get(this.playerX, this.playerY, 1);
 	if (go0.isSolid() || go1.isSolid()) {
 	    this.playerX = opx;
 	    this.playerY = opy;
@@ -130,7 +130,7 @@ public class Game extends JFrame {
 	return true;
     }
 
-    boolean fixLaserBounds(final int olx, final int oly) {
+    boolean fixLaserBounds(int olx, int oly) {
 	if (this.laserX < 0) {
 	    return false;
 	}
@@ -143,21 +143,21 @@ public class Game extends JFrame {
 	if (this.laserY >= Game.MAP_SIZE) {
 	    return false;
 	}
-	final GameObject go0 = this.map.get(this.laserX, this.laserY, 0);
-	final GameObject go1 = this.map.get(this.laserX, this.laserY, 1);
-	final int dirX = this.laserX - olx;
-	final int dirY = this.laserY - oly;
+	GameObject go0 = this.map.get(this.laserX, this.laserY, 0);
+	GameObject go1 = this.map.get(this.laserX, this.laserY, 1);
+	int dirX = this.laserX - olx;
+	int dirY = this.laserY - oly;
 	if (go0.isSolid() || go1.isSolid()) {
 	    GameObject go0next = Game.GROUND;
 	    try {
 		go0next = this.map.get(this.laserX + dirX, this.laserY + dirY, 0);
-	    } catch (final ArrayIndexOutOfBoundsException e) {
+	    } catch (ArrayIndexOutOfBoundsException e) {
 		// Ignore
 	    }
 	    GameObject go1next = Game.WALL;
 	    try {
 		go1next = this.map.get(this.laserX + dirX, this.laserY + dirY, 1);
-	    } catch (final ArrayIndexOutOfBoundsException e) {
+	    } catch (ArrayIndexOutOfBoundsException e) {
 		// Ignore
 	    }
 	    if (go1.laserMoves() && !go1next.isSolid()) {
@@ -178,7 +178,7 @@ public class Game extends JFrame {
     }
 
     private class EventHandler implements KeyListener {
-	private final GameSound move, turn, bump, fire;
+	private GameSound move, turn, bump, fire;
 
 	public EventHandler() {
 	    this.move = SoundLoader.loadSound("move");
@@ -188,17 +188,17 @@ public class Game extends JFrame {
 	}
 
 	@Override
-	public void keyTyped(final KeyEvent e) {
+	public void keyTyped(KeyEvent e) {
 	    // Do nothing
 	}
 
 	@Override
-	public void keyPressed(final KeyEvent e) {
-	    final Game g = Game.this;
+	public void keyPressed(KeyEvent e) {
+	    Game g = Game.this;
 	    boolean spun = false;
 	    boolean responded = false;
-	    final int opx = g.playerX;
-	    final int opy = g.playerY;
+	    int opx = g.playerX;
+	    int opy = g.playerY;
 	    if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 		responded = true;
 		if (g.facing == Game.FACING_EAST) {
@@ -291,7 +291,7 @@ public class Game extends JFrame {
 		}
 	    }
 	    if (responded) {
-		final boolean proceed = g.fixBounds(opx, opy);
+		boolean proceed = g.fixBounds(opx, opy);
 		if (proceed) {
 		    if (g.playerX == opx && g.playerY == opy && !spun) {
 			this.bump.play();
@@ -304,7 +304,7 @@ public class Game extends JFrame {
 	}
 
 	@Override
-	public void keyReleased(final KeyEvent e) {
+	public void keyReleased(KeyEvent e) {
 	    // Do nothing
 	}
     }
@@ -316,7 +316,7 @@ public class Game extends JFrame {
 
 	@Override
 	public void run() {
-	    final Game g = Game.this;
+	    Game g = Game.this;
 	    while (true) {
 		for (int x = 0; x < Game.MAP_SIZE; x++) {
 		    for (int y = 0; y < Game.MAP_SIZE; y++) {
@@ -329,7 +329,7 @@ public class Game extends JFrame {
 		g.draw();
 		try {
 		    Thread.sleep(100);
-		} catch (final InterruptedException e) {
+		} catch (InterruptedException e) {
 		    // Ignore
 		}
 	    }
@@ -343,12 +343,12 @@ public class Game extends JFrame {
 
 	@Override
 	public void run() {
-	    final Game g = Game.this;
+	    Game g = Game.this;
 	    while (true) {
 		if (g.laser != null) {
 		    g.removeKeyListener(g.eh);
-		    final int olx = g.laserX;
-		    final int oly = g.laserY;
+		    int olx = g.laserX;
+		    int oly = g.laserY;
 		    if (g.laserFacing == Game.FACING_NORTH) {
 			g.laserY--;
 		    } else if (g.laserFacing == Game.FACING_SOUTH) {
@@ -358,7 +358,7 @@ public class Game extends JFrame {
 		    } else if (g.laserFacing == Game.FACING_EAST) {
 			g.laserX++;
 		    }
-		    final boolean laserAlive = g.fixLaserBounds(olx, oly);
+		    boolean laserAlive = g.fixLaserBounds(olx, oly);
 		    g.map.set(Game.EMPTY, olx, oly, 3);
 		    if (!laserAlive) {
 			g.laser = null;
@@ -368,13 +368,13 @@ public class Game extends JFrame {
 		    }
 		    try {
 			Thread.sleep(50);
-		    } catch (final InterruptedException e) {
+		    } catch (InterruptedException e) {
 			// Ignore
 		    }
 		} else {
 		    try {
 			Thread.sleep(1000);
-		    } catch (final InterruptedException e) {
+		    } catch (InterruptedException e) {
 			// Ignore
 		    }
 		}
@@ -384,28 +384,28 @@ public class Game extends JFrame {
 
     private class GameDraw extends JPanel {
 	/**
-	 *
+	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private final int tSize;
+	private int tSize;
 
-	public GameDraw(final int mapSize, final int tileSize) {
+	public GameDraw(int mapSize, int tileSize) {
 	    super();
 	    this.setPreferredSize(new Dimension(mapSize * tileSize, mapSize * tileSize));
 	    this.tSize = tileSize;
 	}
 
 	public void draw() {
-	    final Game g = Game.this;
-	    final Graphics gr = this.getGraphics();
+	    Game g = Game.this;
+	    Graphics gr = this.getGraphics();
 	    if (gr != null) {
 		for (int x = 0; x < Game.MAP_SIZE; x++) {
 		    for (int y = 0; y < Game.MAP_SIZE; y++) {
-			final GameImage gi0 = g.map.get(x, y, 0).getAppearance();
-			final GameImage gi1 = g.map.get(x, y, 1).getAppearance();
-			final GameImage gi2 = g.map.get(x, y, 2).getAppearance();
-			final GameImage gi3 = g.map.get(x, y, 3).getAppearance();
-			final GameImage gi = GameImageCache.getComposite(gi0, gi1, gi2, gi3);
+			GameImage gi0 = g.map.get(x, y, 0).getAppearance();
+			GameImage gi1 = g.map.get(x, y, 1).getAppearance();
+			GameImage gi2 = g.map.get(x, y, 2).getAppearance();
+			GameImage gi3 = g.map.get(x, y, 3).getAppearance();
+			GameImage gi = GameImageCache.getComposite(gi0, gi1, gi2, gi3);
 			gr.drawImage(gi, x * this.tSize, y * this.tSize, null);
 		    }
 		}
